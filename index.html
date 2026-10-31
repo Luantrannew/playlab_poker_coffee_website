@@ -4,6 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Play Lab — Leaderboard</title>
+
+  ## font chữ 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet"> -->
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+  ##
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -20,7 +28,7 @@
   <nav class="tab-menu">
     <button class="tab active" data-page="home" onclick="go('home')">Trang chủ</button>
     <button class="tab" data-page="leaderboard" onclick="go('leaderboard')">Bảng xếp hạng</button>
-    <button class="tab" data-page="tournaments" onclick="go('tournaments')">Lịch thi đấu</button>
+    <button class="tab" data-page="tournaments" onclick="go('tournaments')">Tournaments</button>
     <button class="tab" data-page="menu" onclick="go('menu')">Menu</button>
   </nav>
 
@@ -29,7 +37,7 @@
     <div class="drawer-title">Play Lab</div>
     <a class="drawer-item active" data-page="home" onclick="go('home')">Trang chủ</a>
     <a class="drawer-item" data-page="leaderboard" onclick="go('leaderboard')">Bảng xếp hạng</a>
-    <a class="drawer-item" data-page="tournaments" onclick="go('tournaments')">Lịch thi đấu</a>
+    <a class="drawer-item" data-page="tournaments" onclick="go('tournaments')">Tournaments</a>
     <div class="drawer-footer">
       Board Game & Coffee<br/>
       9:00 – 23:00<br/>
@@ -87,7 +95,7 @@
     <section id="page-leaderboard" class="page">
       <div class="page-head">
         <h2>Leaderboard</h2>
-        <button class="refresh" onclick="loadData()">Tải lại</button>
+        <button class="refresh" onclick="loadData(true)">Tải lại</button>
       </div>
       <div id="app" class="list">
         <div class="loading">Đang tải…</div>
@@ -124,17 +132,14 @@
     }
 
     function go(page) {
-      // Ẩn/hiện page
       document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
       const target = document.getElementById('page-' + page);
       if (target) target.classList.add('active');
 
-      // Đồng bộ trạng thái active cho tab menu
       document.querySelectorAll('.tab').forEach(el => {
         el.classList.toggle('active', el.dataset.page === page);
       });
 
-      // Đồng bộ trạng thái active cho drawer
       document.querySelectorAll('.drawer-item[data-page]').forEach(el => {
         el.classList.toggle('active', el.dataset.page === page);
       });
@@ -150,41 +155,50 @@
         window.__tourLoaded = true;
         loadTournaments();
       }
+      if (page === 'menu' && !window.__menuLoaded) {
+        window.__menuLoaded = true;
+        loadMenu();
+      }
     }
-    
-    /* ===== MOCK DATA — LEADERBOARD ===== */
-    // Sắp xếp giảm dần theo elo để dễ nhìn
-    const MOCK_DATA = [
-      { id: '6860', name: 'Mr. Phantom',  elo: 40, exchanged: 16, tickets: 0, hands: 120 },
-      { id: '7695', name: 'DUCTIM',       elo: 23, exchanged: 20, tickets: 1, hands: 95  },
-      { id: '6739', name: '3 Báo',        elo: 19, exchanged: 19, tickets: 0, hands: 88  },
-      { id: '1079', name: 'Chiến Thắng',  elo: 15, exchanged: 15, tickets: 1, hands: 72  },
-      { id: '9756', name: 'Mr. Vandal',   elo: 14, exchanged: 14, tickets: 3, hands: 68  },
-      { id: '5505', name: 'Mr. Doo',      elo: 14, exchanged: 7,  tickets: 0, hands: 64  },
-      { id: '1812', name: 'Mr. GB',       elo: 13, exchanged: 1,  tickets: 2, hands: 60  },
-      { id: '2827', name: 'Lê Sịn',       elo: 11, exchanged: 11, tickets: 0, hands: 55  },
-      { id: '9600', name: 'Duy Thành',    elo: 11, exchanged: 1,  tickets: 0, hands: 52  },
-      { id: '7113', name: 'Phan Minh Trí',elo: 7,  exchanged: 5,  tickets: 0, hands: 48  },
-      { id: '9600b',name: 'Trang',        elo: 6,  exchanged: 2,  tickets: 0, hands: 40  },
-      { id: '0535', name: 'Báo',          elo: 3,  exchanged: 3,  tickets: 0, hands: 32  },
-      { id: '8177', name: 'Duy Tân',      elo: 7,  exchanged: 0,  tickets: 0, hands: 30  },
-      { id: '3025', name: 'Lâm',          elo: 4,  exchanged: 0,  tickets: 0, hands: 28  },
-      { id: '8007', name: 'Khánh Đăng',   elo: 8,  exchanged: 0,  tickets: 0, hands: 26  },
-      { id: '8007b',name: 'Vy',           elo: 2,  exchanged: 0,  tickets: 0, hands: 24  },
-      { id: '8007c',name: 'Dung',         elo: 2,  exchanged: 0,  tickets: 0, hands: 22  },
-      { id: '8007d',name: 'Nam',          elo: 2,  exchanged: 0,  tickets: 0, hands: 20  },
-      { id: '8007e',name: 'Linh',         elo: 1,  exchanged: 0,  tickets: 0, hands: 18  },
-      { id: '8007f',name: 'Huy',          elo: 1,  exchanged: 0,  tickets: 0, hands: 16  },
-      { id: '8007g',name: 'Mai',          elo: 1,  exchanged: 0,  tickets: 0, hands: 14  }
-    ];
 
-    function loadData() {
+    /* ===== STATE ===== */
+    let leaderboardData = [];
+    let menuData = [];
+
+    /* ===== HELPERS ===== */
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, c => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[c]));
+    }
+
+    function formatVND(n) {
+      if (n == null || isNaN(n)) return '—';
+      return Number(n).toLocaleString('vi-VN') + ' đ';
+    }
+
+    /* ===== LEADERBOARD ===== */
+    // API: GET /api/leaderboard
+    // Trả về mảng: [{ id, name, elo, exchanged, tickets, hands }]
+    async function loadData(force = false) {
       const app = document.getElementById('app');
       app.innerHTML = '<div class="loading">Đang tải…</div>';
-      setTimeout(() => {
-        const sorted = [...MOCK_DATA].sort((a, b) => b.elo - a.elo);
+
+      try {
+        const url = '/api/leaderboard' + (force ? '?refresh=1' : '');
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+
+        if (!Array.isArray(data)) throw new Error('Dữ liệu trả về không hợp lệ');
+
+        leaderboardData = data;
+        const sorted = [...data].sort((a, b) => (b.elo || 0) - (a.elo || 0));
         render(sorted);
-      }, 250);
+      } catch (e) {
+        console.error('loadData:', e);
+        app.innerHTML = '<div class="loading">Lỗi tải dữ liệu. Kiểm tra API.</div>';
+      }
     }
 
     function render(data) {
@@ -211,7 +225,7 @@
         }
 
         return `
-          <div class="${cardClass}" onclick="showProfile('${p.id}')">
+          <div class="${cardClass}" onclick="showProfile('${escapeHtml(p.id)}')">
             <div class="${rankClass}">${rankContent}</div>
             <div class="info">
               <div class="name-row">
@@ -221,7 +235,7 @@
               <div class="meta-row">
                 <span>Vé: ${p.tickets}</span>
                 <span>Đã đổi: ${p.exchanged}</span>
-                <span class="mono">${p.id}</span>
+                <span class="mono">${escapeHtml(p.id)}</span>
               </div>
             </div>
           </div>
@@ -229,30 +243,38 @@
       }).join('');
     }
 
-    /* ===== MOCK DATA — TOURNAMENTS ===== */
-    const MOCK_TOUR = [
-      { name: 'HIGH ROLLER',      buyin: 180000, stack: '55K',  blind: "20'/17'", start: 11 },
-      { name: 'MINI HIGH ROLLER', buyin: 170000, stack: '50K',  blind: "17'/15'", start: 11 },
-      { name: 'DEEPSTACK',        buyin: 150000, stack: '40K',  blind: "17'/15'", start: 11 },
-      { name: 'DOUBLE LAB',       buyin: 170000, stack: '35K',  blind: "17'/15'", start: 11 },
-      { name: 'LAB STACK SUPER',  buyin: 170000, stack: '70K',  blind: "20'/15'", start: 11 },
-      { name: 'DEEPSTACK TURBO',  buyin: 140000, stack: '30K',  blind: "15'/12'", start: 11 },
-      { name: 'LAB TURBO',        buyin: 140000, stack: '25K',  blind: "15'/12'", start: 11 },
-      { name: 'LAB HYPER',        buyin: 120000, stack: '25K',  blind: "12'/10'", start: 11 },
-      { name: 'KICK LAB 1A',      buyin: 140000, stack: '30K',  blind: "17'/15'", start: 11 },
-      { name: 'KICK LAB 1B',      buyin: 140000, stack: '30K',  blind: "17'/15'", start: 11 },
-      { name: 'LAB HAPPY',        buyin: 140000, stack: '30K',  blind: "17'/15'", start: 11 },
-      { name: 'LAB TITAN',        buyin: 160000, stack: '50K',  blind: "22'/18'", start: 11 },
-      { name: 'MEGA STACK',       buyin: 160000, stack: '60K',  blind: "20'/15'", start: 11 },
-      { name: 'SIT N GO PREMIUM', buyin: 95000,  stack: '15K',  blind: "12'/12'", start: 6  }
-    ];
+    function showProfile(id) {
+      const p = leaderboardData.find(x => x.id === id);
+      if (!p) return;
+      alert(
+        `Profile: ${p.name}\n` +
+        `Mã: ${p.id}\n` +
+        `ELO: ${p.elo}\n` +
+        `Vé còn lại: ${p.tickets}\n` +
+        `Điểm đã đổi: ${p.exchanged}\n` +
+        `Số ván: ${p.hands ?? '—'}`
+      );
+    }
 
-    function loadTournaments() {
+    /* ===== TOURNAMENTS ===== */
+    // API: GET /api/tournaments
+    // Trả về mảng: [{ name, buyin, stack, blind, start }]
+    async function loadTournaments() {
       const app = document.getElementById('tour-app');
       app.innerHTML = '<div class="loading">Đang tải…</div>';
-      setTimeout(() => {
-        renderTournaments(MOCK_TOUR);
-      }, 250);
+
+      try {
+        const res = await fetch('/api/tournaments');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+
+        if (!Array.isArray(data)) throw new Error('Dữ liệu trả về không hợp lệ');
+
+        renderTournaments(data);
+      } catch (e) {
+        console.error('loadTournaments:', e);
+        app.innerHTML = '<div class="loading">Lỗi tải dữ liệu. Kiểm tra API.</div>';
+      }
     }
 
     function renderTournaments(data) {
@@ -268,30 +290,54 @@
             <div class="tour-buyin">${formatVND(t.buyin)}</div>
           </div>
           <div class="tour-meta">
-            <span>Stack ${t.stack}</span>
-            <span>${t.blind}</span>
-            <span>Bắt đầu Lv.${t.start}</span>
+            <span>Stack ${escapeHtml(t.stack)}</span>
+            <span>${escapeHtml(t.blind)}</span>
+            <span>Bắt đầu Lv.${escapeHtml(t.start)}</span>
           </div>
         </div>
       `).join('');
     }
 
-    function formatVND(n) {
-      return n.toLocaleString('vi-VN') + ' đ';
+    /* ===== MENU (từ sheet TOUR, cột N + O) ===== */
+    // API: GET /api/menu
+    // Trả về mảng: [{ name, price }]
+    async function loadMenu() {
+      const app = document.getElementById('menu-app');
+      app.innerHTML = '<div class="loading">Đang tải…</div>';
+
+      try {
+        const res = await fetch('/api/menu');
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+
+        if (!Array.isArray(data)) throw new Error('Dữ liệu trả về không hợp lệ');
+
+        menuData = data;
+        renderMenu(data);
+      } catch (e) {
+        console.error('loadMenu:', e);
+        app.innerHTML = '<div class="loading">Lỗi tải dữ liệu. Kiểm tra API.</div>';
+      }
     }
 
-    function showProfile(id) {
-      const p = MOCK_DATA.find(x => x.id === id);
-      if (!p) return;
-      alert(`Profile: ${p.name}\nMã: ${p.id}\nELO: ${p.elo}\nVé còn lại: ${p.tickets}\nĐiểm đã đổi: ${p.exchanged}\nSố ván: ${p.hands}`);
-    }
+    function renderMenu(data) {
+      const app = document.getElementById('menu-app');
+      if (!data.length) {
+        app.innerHTML = '<div class="loading">Chưa có món.</div>';
+        return;
+      }
 
-    function escapeHtml(s) {
-      return String(s).replace(/[&<>"']/g, c => ({
-        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-      }[c]));
-
-    
+      app.innerHTML = `
+        <div class="menu-group">
+          <div class="menu-group-title">Đồ uống & Món</div>
+          ${data.map(item => `
+            <div class="menu-item">
+              <div class="menu-item-name">${escapeHtml(item.name)}</div>
+              <div class="menu-item-price">${formatVND(item.price)}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
     }
   </script>
 </body>

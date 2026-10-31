@@ -1,0 +1,25 @@
+{
+  "name": "poker_web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Luantrannew/playlab_poker_coffee_website.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Luantrannew/playlab_poker_coffee_website/issues"
+  },
+  "homepage": "https://github.com/Luantrannew/playlab_poker_coffee_website#readme",
+  "dependencies": {
+    "google-auth-library": "^11.3.2",
+    "google-spreadsheet": "^5.3.0"
+  }
+}
